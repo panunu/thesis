@@ -12,18 +12,34 @@
 * Tulosten todentaminen ja jatkokehitys
 * Tiivistelmä
 
+# Sanasto
+
+DOM
+
+Scala
+
+Java
+
+PHP
+
+JVM
+
+D3
+
 # Johdanto
 
 Tavoitteena on selvittää, voiko keskustelun automaattisesta visualisoinnista ja yhteenvedosta olla hyötyä keskustelun kokonaisuuden hahmottamisen suhteen. Samalla todennetaan insinöörityössä hyödynnettävän Juju-ohjelmiston käyttökelpoisuus.
 
 # Keskustelijoiden vuorovaikutus keskusteluun ja toisiinsa
 
-Keskustelun osalliset ja heidän väliset suhteet vaikuttavat keskustelun kulkuun ja lopputulokseen. 
+Keskustelun osalliset ja heidän väliset suhteet vaikuttavat keskustelun kulkuun ja lopputulokseen.
 ...
 
-Auttaako visualisointi dialektiikan eli keskinäisviestinnän todentamisessa? Puhuvatko siis ihmiset samoista asioista, vai jauhavat omiaan sivuuttaen keskustelukumppanin sanoman?
+Auttaako visualisointi dialektiikan eli keskinäisviestinnän todentamisessa? Puhuvatko ihmiset siis samoista asioista, vai ilmaisevatko he omia ajatuksiaan sivuuttaen keskustelukumppanin sanoman?
 
-Kenen aloittamista aiheista puhutaan? Kenellä on ollut valtaa ohjata keskustelun kulkua? Kuka puhuu omista aiheistaan, kuka toistelee aikaisemman keskustelun muovaamia teemoja?
+Kenen aloittamista aiheista puhutaan? Kenellä on ollut valtaa ohjata keskustelun kulkua? Kuka tuo keskusteluun uutta sisältöä ja kuka toistelee aikaisemman keskustelun asettamia teemoja?
+
+Onko keskustelun sisältö helpompi hahmottaa, kun siitä on etukäteen tehty automaattinen yhteenveto?
 
 # ?????
 
@@ -47,21 +63,36 @@ aika, henkilö, puheenvuoro
 aika, henkilö, puheenvuoro
 aika, henkilö, puheenvuoro.
 
-# Tekninen toteutus
+# Tekninen toteutus ja tietorakenteet
 
-Järjestelmän tekninen toteutus on joustavuuden nimissä jaettu selkeästi kahteen osaan: prosessointityökaluun ja käyttöliittymään. Tämä mahdollistaa prosessointityökalun hyödyntämisen erillisissä palveluissa ilman, että se on sidottu mihinkään valmiiseen käyttöliittymään. Rakenne on esitetty kuvassa [KUVA].
+Järjestelmän tekninen toteutus on joustavuuden nimissä jaettu selkeästi kahteen osaan: prosessointityökaluun ja käyttöliittymään (web-palvelu). Tämä mahdollistaa prosessointityökalun hyödyntämisen erillisissä palveluissa ilman, että se on sidottu mihinkään valmiiseen käyttöliittymään. Samalla web-palvelun voi julkaista tietokantaan tallennetulla esiprosessoidulla datalla. Rakenne on esitetty kuvassa [KUVA].
 
 ## Järjestelmien välinen viestintä
 
 Järjestelmän prosessointityökalu ja käyttöliittymä on toteutettu eri teknologioilla: Scala ja PHP.
 
-Viestit välitetään järjestelmästä toiseen eri muodoissa. Ne käsitellään Base64-koodauksella riippumatta viestin kulkusuunnasta. Tarkoituksena on välttää mahdolliset merkistöongelmat. Lähettävä osapuoli enkoodaa? viestin, ja vastaanottaja dekoodaa? sen.
+Viestit välitetään järjestelmästä toiseen eri muodoissa. Ne käsitellään Base64-koodauksella riippumatta viestin kulkusuunnasta. Enkoodauksen tarkoituksena on välttää mahdolliset merkistöongelmat ja tästä mahdollisesti aiheutuva tiedon korruptoituminen. Lähettävä osapuoli enkoodaa viestin, ja vastaanottaja dekoodaa sen.
 
-Käyttöliittymä lähettää palveluun ladatun CSV-tiedoston sisällön prosessointityökalulle. Tiedoston sisältöä ei vielä tässä vaiheessa prosessoida mitenkään, lukuunottamatta kuitenkaan enkoodausta?.
+Käyttöliittymä lähettää palveluun ladatun CSV-tiedoston sisällön prosessointityökalulle. Tiedoston sisältöä ei vielä tässä vaiheessa prosessoida, lukuunottamatta enkoodausta.
 
-Prosessointityökalu rakentaa viestijonon kautta saadusta CSV-materiaalista JSON-formaatin mukaista dataa. Tämä välitetään takaisin käyttöliittymäohjelmistolle tallennettavaksi tietokantaan.
+Prosessointityökalu rakentaa viestijonon kautta saadusta CSV-materiaalista JSON-formaatin mukaista dataa. Tämä välitetään takaisin käyttöliittymäohjelmistolle tallennettavaksi tietokantaan. 
 
 ### Asynkroninen viestijonoprotokolla
+
+Asynkronista viestijonoprotokollaa käytetään tiedon välittämiseen järjestelmästä toiseen. Protokollan toteuttava järjestelmä myös mahdollistaa sovelluksen jakamisen tarvittaessa useammalle palvelimelle.
+
+Edellämainitusta jaosta seuraa useitakin hyötyjä. Palvelinympäristöt on hyvä konfiguroida mahdollisimman yksinkertaisiksi ja asentaa vain ne sovellukset, joita projekti tarvitsee. Näin esimerkiksi tietoturvaa on helpompi ylläpitää, koska päivitettävien riippuvuuksien määrä on minimoitu. Samalla voidaan optimoida palvelinta suorituskyvyn kannalta juuri sille asetetun tehtävän mukaisesti.
+
+Viestijonoprotokollan tekniseen toteutukseen on käytetty RabbitMQ-ohjelmistoa. RabbitMQ on toteutettu funktionaalisella Erlang-ohjelmointikielellä.
+
+Erilaisia protokollan mukaisia viestimenetelmiä on muutama, jotka ovat:
+
+- direct messaging
+- asd asd
+- asd asd 
+
+Työhön on valittu käytettäväksi yksinkertaisin direct-menetelmä, koska se on käyttötapauksen kannalta riittävä.
+
 
 ## Prosessointi
 
@@ -76,15 +107,23 @@ Prosessointityökalu pyörii ajastetusti tausta-ajona. Se on toteutettu hyödynt
 Scala on ohjelmointikieli, joka yhdistää kaksi tekijää yhteen, jotka yleensä nimenomaan erottavat kieliä toisistaan; olio-ohjelmoinnin ja funktionaalisen ohjelmoinnin.  
 [Scala By Example, Martin Odersky, 2011]
 
-Koska Scala toimii JVM:n päällä, sillä on mahdollista käyttää muilla JVM-yhteensopivilla ohjelmointikielillä toteutettuja ohjelmia. Tämän ansiosta Jujun käyttöönotto projektissa on helppoa.
+Koska Scala toimii JVM:n päällä, sillä on mahdollista käyttää muilla ohjelmointikielillä toteutettuja ohjelmia, jotka käännetään JVM-yhteensopivaksi tavukoodiksi. Tämän ansiosta Javalla toteutetun Juju-kirjaston käyttöönotto projektissa on helppoa.
 
 ### MongoDB
 
+MongoDB on dokumenttiorientoitunut tietokanta. 
+
 Prosessointi höydyntää E-Reading -hankkeen yhteydessä toteutettua Juju-koneistoa ja sitä sovelletaan entiteettien tunnistamiseen ja avainsanojen poimintaan. Työn aikana oli myös tarkoitus todentaa koneiston käyttökelpoisuus ulkopuolisen näkökulmasta. Samalla oli mahdollisuus vaikuttaa ohjelmiston rajapinnan, dokumentaation ja sen kehittämiseen liittyvien käytäntöjen kehitykseen.
+
+### D3.js
+
+D3 on JavaScript-kirjasto.
 
 ## Visualisointi
 
-...
+- Kokonainen keskustelu on luettavissa
+- Yksittäisten puheenvuorojen avainsanat esiintymisjärjestyksessä
+- Erittäin tärkeää.
 
 # Keskustelijoiden pisteyttäminen, "Gamification"
 
@@ -101,4 +140,4 @@ Mahdollisten riskien takia projektissa päädyttiin ratkaisuun, jossa pisteytyst
 
 Eräs todella tärkeä osa kommunikaatiota on ilmaisun tyyli. Tällä tarkoitan esimerkiksi sitä, millä äänensävyllä asian ilmaisee. Keskustelun tulkitsemisessa tällä on iso rooli. Jos keskustelu vaikka muuttuu dramaattisesti, puhetyylistä voidaan saada osviittaa mahdollisesta syystä. Ilmaisuille on tehty oma merkintäkielensä, [SELVITÄ].
 
-Tällä hetkellä sovellus pyrkii olemaan kohtuullisen yleispätevä erikoistumatta mihinkään tiettyyn keskusteluvariaatioon. Jatkossa ohjelmistoa voisi jatkokehittää erikoistumaan erilaisiin sovellutuksiin. Eräs idea olisi hahmottaa yksittäisten henkilöiden välisten suhteiden lisäksi vuorovaikutusta isommassa mittakaavassa. Tämä voitaisiin saavuttaa erilaisten tunnisteiden lisäämisellä käsiteltävään materiaaliin, esimerkiksi tässä tapauksessa henkilölle määriteltäisiin ryhmä, johon hän kuuluu. Näin voitaisiin esimerkiksi politiikan viitekehyksessä havaita, miten puolueiden väliset aihepiirit eroavat toisistaan.
+Tällä hetkellä sovellus pyrkii olemaan kohtuullisen yleispätevä erikoistumatta mihinkään tiettyyn keskusteluvariaatioon. Jatkossa ohjelmistoa voisi jatkokehittää erikoistumaan erilaisiin sovellutuksiin. Eräs idea olisi hahmottaa yksittäisten henkilöiden välisten suhteiden lisäksi vuorovaikutusta isommassa mittakaavassa. Tämä voitaisiin saavuttaa erilaisten tunnisteiden lisäämisellä käsiteltävään materiaaliin. Yksi vaihtoehto olisi, että henkilölle määriteltäisiin ryhmä, johon hän kuuluu. Näin voitaisiin esimerkiksi politiikan viitekehyksessä havaita, miten puolueiden ajamat aihepiirit eroavat toisistaan.
