@@ -31,7 +31,6 @@
 %euro symbol
 \usepackage{eurosym}
 
-
 %NORMAL TEXT
 %all text, title, etc. in same tahoma font
 \setmainfont{Tahoma}
@@ -47,7 +46,7 @@
 
 %IMAGE - FIGURE
 %the figures are in "img" folder.
-\graphicspath{{img/}}
+\graphicspath{{illustration/}}
 %figure number without chapter (1.1, 1.2, 2.1) to (1, 2, 3)
 \counterwithout{figure}{chapter}
 %border around images
@@ -114,7 +113,6 @@
 %\makeatother %
 %\setlength{\bibitem}{16.5pt}
 \setlength{\bibitemsep}{11pt}
-
 
 \author{Panu Leppäniemi}
 \title{Automaattinen keskustelun visualisointi}
@@ -235,13 +233,44 @@ Prosessointityökalu pyörii ajastetusti tausta-ajona. Se on toteutettu hyödynt
 - Java
 - Akka.
 
-Prosessointi höydyntää E-Reading -hankkeen yhteydessä toteutettua Juju-koneistoa ja sitä sovelletaan entiteettien tunnistamiseen ja avainsanojen poimintaan. Työn aikana oli myös tarkoitus todentaa koneiston käyttökelpoisuus ulkopuolisen näkökulmasta. Samalla oli mahdollisuus vaikuttaa ohjelmiston rajapinnan, dokumentaation ja sen kehittämiseen liittyvien käytäntöjen kehitykseen.
+Prosessointi höydyntää E-Reading -hankkeen yhteydessä toteutettua Juju-koneistoa.
+
+\subsection{Juju}
+Juju on Javalla toteutettu ohjelmisto, jota voidaan käyttää entiteettien tunnistamiseen ja avainsanojen poimintaan. Lähitulevaisuudessa Juju on tarkoitus julkaista avoimena lähdekoodina. Jujun kehitys on ollut pitkään kokeellista, mutta insinöörityön aikana koneistoa on viimeistelty. Työn aikana oli tarkoitus todentaa koneiston käyttökelpoisuus ulkopuolisen näkökulmasta. Samalla oli mahdollisuus vaikuttaa ohjelmiston rajapinnan, dokumentaation ja sen kehittämiseen liittyvien käytäntöjen kehitykseen.
+
+Juju-integraation helpottamiseksi Juju konvertoitiin Maven-projektiksi. Aikaisemmin ulkoiset kirjastot, joihin Jujulla oli riippuvuus, säilytettiin versiohallinnassa erillisessä projektissa. Nykyään riippuvuudet on määritelty pom.xml-tiedostossa.
+
+\begin{verbatim}
+<dependencies>
+    <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>13.0.1</version>
+    </dependency>
+    ...
+</dependencies>
+\end{verbatim}
+Esimerkki Jujun riippuvuuksien määrittelystä pom.xml-tiedostolla.
+
+Edellämainittu konvertointi mahdollistaa Jujun integroinnin helposti muihin Maven- tai Mavenin pom-määritystä tukeviin projekteihin, kuten SBT-projektiin.
 
 \subsection{Scala}
-Scala on ohjelmointikieli, joka yhdistää kaksi tekijää yhteen, jotka yleensä nimenomaan erottavat kieliä toisistaan; olio-ohjelmoinnin ja funktionaalisen ohjelmoinnin.  
+Scala on ohjelmointikieli, joka yhdistää kaksi tekijää yhteen, jotka yleensä nimenomaan erottavat kieliä toisistaan; olio-ohjelmoinnin ja funktionaalisen ohjelmoinnin. 
+\cite[asd]{scala-by-example}
 [Scala By Example, Martin Odersky, 2011]
 
-Koska Scala toimii JVM:n päällä, sillä on mahdollista käyttää muilla ohjelmointikielillä toteutettuja ohjelmia, jotka käännetään JVM-yhteensopivaksi tavukoodiksi. Tämän ansiosta Javalla toteutetun Juju-kirjaston käyttöönotto projektissa on helppoa.
+Koska Scala toimii JVM:n päällä, sillä on mahdollista käyttää muilla ohjelmointikielillä toteutettuja ohjelmia, jotka käännetään JVM-yhteensopivaksi tavukoodiksi. Tämän ansiosta Javalla toteutetun Juju-kirjaston käyttöönotto projektissa oli helppoa.
+
+\subsection{SBT}
+SBT, Simple Build Tool, on pääasiassa Scala-projekteihin tarkoitettu nönnönnöö.
+
+\begin{verbatim}
+resolvers += "Local Maven Repository" at "file://.m2/repository"
+libraryDependencies += "fi.metropolia.ereading" % "Juju" % "0.0.1-SNAPSHOT"
+\end{verbatim}
+Esimerkki Jujun määrityksestä projektiin riippuvuudeksi sbt.build-tiedostossa.
+
+Riippuvuuden määrittelyn jälkeen Juju voidaan ladata, jonka jälkeen se on valmis käytettäväksi.
 
 \subsection{MongoDB}
 MongoDB on dokumenttiorientoitunut tietokanta. 
@@ -256,15 +285,20 @@ Keskustelun visualisoinnin tarkoituksena on helpottaa sisällön ja suhteiden ha
 - Yksittäisten puheenvuorojen avainsanat esiintymisjärjestyksessä
 
 \section{Puheenvuorojen eroavaisuudet}
-Halusimme selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voiko sen visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystymmekö esimerkiksi erottelemaan keskustelijat, joilla on tuoda uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita. Eroavaisuuksista voimme myös mahdollisesti nähdä, eteneekö keskustelu eri aihepiireihin.
+Haluttiin selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voiko eroavaisuuksia visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystytäänkö esimerkiksi erottelemaan keskustelijat, jotka kykenevät tuomaan uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita lisäämättä mitään uutta. Eroavaisuuksista voidaan myös mahdollisesti nähdä, eteneekö keskustelu eri aihepiireihin.
 
 Työssä tutkittiin kahta erilaista lähestymistapaa:
 \begin{enumerate}
-\item Puheenvuoron eroavaisuus verrattuna edelliseen puheenvuoroon
-\item Yksittäisen puheenvuoron eroavaisuus kokonaisuuteen.
+\item puheenvuoron eroavaisuus verrattuna edelliseen puheenvuoroon
+\item yksittäisen puheenvuoron eroavaisuus keskustelukokonaisuuteen.
 \end{enumerate}
 
-Erilaisuus määritetään Jakkard-indeksillä, jota käytetään dokumenttien samanlaisuuden ja erilaisuuden vertailuun.
+Erilaisuus määritetään Jakkard-indeksillä, jota käytetään dokumenttien samanlaisuuden ja erilaisuuden vertailuun. Lähestymistapoja tämänkin suhteen oli pari. Erilaisuuden vertailun lähtöaineistona voidaan käyttää:
+
+\begin{enumerate}
+\item kokonaista puheenvuoroa, jota verrataan koko keskusteluun
+\item puheenvuorosta poimittuja avainsanoja, joita verrataan koko keskustelusta poimittuihin avainsanoihin
+\end{enumerate}
 
 \section{Gamification}
 Keskustelun pisteyttämisen ydintarkoitus on saada nopeasti karkea kuva osallistujien aktiivisuudesta ja puheenvuorojen laadukkuudesta. Pisteytys perustuu aina puheenvuoroon ja sen välisiin suhteisiin. Pisteitä saa esimerkiksi mainitsemalla uuden käsitteen keskustelun aikana.
