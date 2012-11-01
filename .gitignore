@@ -1,2 +1,9 @@
 sources
 .DS_Store
+
+*.aux
+*.bbl
+*.blg
+*.log
+*.md
+*.synctex.gz
