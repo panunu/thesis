@@ -6,4 +6,6 @@ sources
 *.blg
 *.log
 *.md
-*.synctex.gz
+*.synctex.*
+*.pdf
+*.toc
