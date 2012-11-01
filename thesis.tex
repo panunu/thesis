@@ -160,7 +160,7 @@ Tavoitteena on selvittää, voiko keskustelun automaattisesta visualisoinnista j
 * Johdanto
 * Keskustelijoiden vuorovaikutus keskusteluun ja toisiinsa
 * Nykyiset palaverikäytännöt ja ongelmakohdat
-* Automaattinen litterointi - tulevaisuus
+* Käyttötapaukset / Automaattinen litterointi - tulevaisuus
 * Tekninen toteutus ja tietorakenteet
 * Keskustelijoiden pisteyttäminen, gamification
 * Keskustelukulun visualisointi
@@ -182,7 +182,7 @@ Onko keskustelun sisältö helpompi hahmottaa, kun siitä on etukäteen tehty au
 
 Jos nähdään, mitä aiheita esimerkiksi palaverin aikana on käsitelty ja samalla kerätään huomioita, mitä asioita palaverin ansiosta on päätetty, voidaan mahdollisesti useamman palaverin jälkeen alkaa muodostaa mielikuvaa siitä, käsitelläänkö samaa aihetta useissa palavereissa saamatta aikaan mitään konkreettista. Näin voidaan nostaa esille mahdollisesti hankalat päätökset ja korottaa niiden painoarvoa seuraavassa käsittelyssä.
 
-\chapter{Automaattinen litterointi - tulevaisuus}
+\chapter{Käyttötapaukset - Automaattinen litterointi - tulevaisuus}
 Palavereissa, asiakastapaamisissa ja vastaavissa tilaisuuksissa vähintään yhden osallistujan kannattaa ottaa sihteerin rooli. Tämä tarkoittaa sitä, että hänen mahdollisuutensa osallistua keskusteluun vähenee merkittäväksi. Varsinkin pienemmässä projektiryhmässä yhden henkilön irroittaminen kyseiseen tehtävään ei aina ole mahdollista. Tunnetusti ihminen ei ole tehokas suorittamaan useita tehtäviä samanaikaisesti. Tämä saattaa johtaa siihen, ettei palaverin aikana kirjoitetun muistion laatu vastaa aina haluttua.
 
 Yksi ratkaisuvaihtoehto on keskustelun äänittäminen muistiin, jolloin mikään käsitelty asia ei jäisi kirjaamatta. Näin vältettäisiin myös mahdolliset kiistatilanteet palaverin aikana tehdyissä suullisissa sopimuksissa. Ratkaisu on kuitenkin kömpelö, eikä soveltuisi varsinkaan pitkäkestoisiin keskusteluihin, koska nauhoituksen läpikäyminen jälkikäteen esimerkiksi yhteenvedon kirjoittamista varten veisi aikaa. Toiseksi voisi olla työlästä hahmottaa kuka vuorollaan on ollut äänessä, johtaen mahdollisiin väärinkäsityksiin.
@@ -255,10 +255,18 @@ Keskustelun visualisoinnin tarkoituksena on helpottaa sisällön ja suhteiden ha
 - Kokonainen keskustelu on luettavissa
 - Yksittäisten puheenvuorojen avainsanat esiintymisjärjestyksessä
 
-\subsection{Puheenvuorojen eroavaisuudet}
-Halusimme selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voiko sen visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystymmekö esimerkiksi erottelemaan keskustelijat, joilla on tuoda uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita.
+\section{Puheenvuorojen eroavaisuudet}
+Halusimme selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voiko sen visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystymmekö esimerkiksi erottelemaan keskustelijat, joilla on tuoda uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita. Eroavaisuuksista voimme myös mahdollisesti nähdä, eteneekö keskustelu eri aihepiireihin.
 
-\subsection{Gamification}
+Työssä tutkittiin kahta erilaista lähestymistapaa:
+\begin{enumerate}
+\item Puheenvuoron eroavaisuus verrattuna edelliseen puheenvuoroon
+\item Yksittäisen puheenvuoron eroavaisuus kokonaisuuteen.
+\end{enumerate}
+
+Erilaisuus määritetään Jakkard-indeksillä, jota käytetään dokumenttien samanlaisuuden ja erilaisuuden vertailuun.
+
+\section{Gamification}
 Keskustelun pisteyttämisen ydintarkoitus on saada nopeasti karkea kuva osallistujien aktiivisuudesta ja puheenvuorojen laadukkuudesta. Pisteytys perustuu aina puheenvuoroon ja sen välisiin suhteisiin. Pisteitä saa esimerkiksi mainitsemalla uuden käsitteen keskustelun aikana.
 
 Tämän lisäksi pisteyttämisen tuomalla "porkkanalla" voisi aktivoida osallistujia mukaan keskusteluun. Kyseinen ajatus liittyy Gamification-ajatusmalliin. Gamificationin perusidea on se, että pyritään tuomaan esimerkiksi videopeleistä tuttuja elementtejä arkipäivän rutiineihin, tarkoituksena motivoida työntekijää suoriutumaan tehtävistään.
