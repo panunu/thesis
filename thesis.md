@@ -77,22 +77,23 @@ Käyttöliittymä lähettää palveluun ladatun CSV-tiedoston sisällön prosess
 
 Prosessointityökalu rakentaa viestijonon kautta saadusta CSV-materiaalista JSON-formaatin mukaista dataa. Tämä välitetään takaisin käyttöliittymäohjelmistolle tallennettavaksi tietokantaan. 
 
-### Asynkroninen viestijonoprotokolla
+### Advanced Message Queue Protocol
 
-Asynkronista viestijonoprotokollaa käytetään tiedon välittämiseen järjestelmästä toiseen. Protokollan toteuttava järjestelmä myös mahdollistaa sovelluksen jakamisen tarvittaessa useammalle palvelimelle.
+Viestijonoprotokollaa, AMQP, käytetään tiedon välittämiseen järjestelmästä toiseen. AMQP:n toteuttava middleware broker!! toimii viestinvälittäjänä.
 
-Edellämainitusta jaosta seuraa useitakin hyötyjä. Palvelinympäristöt on hyvä konfiguroida mahdollisimman yksinkertaisiksi ja asentaa vain ne sovellukset, joita projekti tarvitsee. Näin esimerkiksi tietoturvaa on helpompi ylläpitää, koska päivitettävien riippuvuuksien määrä on minimoitu. Samalla voidaan optimoida palvelinta suorituskyvyn kannalta juuri sille asetetun tehtävän mukaisesti.
+Termistöstä??
 
-Viestijonoprotokollan tekniseen toteutukseen on käytetty RabbitMQ-ohjelmistoa. RabbitMQ on toteutettu funktionaalisella Erlang-ohjelmointikielellä.
+Protokolla mahdollistaa myös sovelluksen jakamisen tarvittaessa useammalle palvelimelle. Edellämainitusta jaosta seuraa useitakin hyötyjä. Palvelinympäristöt on hyvä konfiguroida mahdollisimman yksinkertaisiksi ja asentaa vain ne sovellukset, joita projekti tarvitsee. Näin esimerkiksi tietoturvaa on helpompi ylläpitää, koska päivitettävien riippuvuuksien määrä on minimoitu. Samalla voidaan optimoida palvelinta suorituskyvyn kannalta juuri sille asetetun tehtävän mukaisesti.
 
-Erilaisia protokollan mukaisia viestimenetelmiä on muutama, jotka ovat:
+Työssä on käytetty AMQP:n standardin toteuttavaa RabbitMQ-palvelinohjelmistoa. RabbitMQ on toteutettu funktionaalisella Erlang-ohjelmointikielellä. 
+
+Erilaisia protokollan mukaisia viestimenetelmiä on muutama, jotka ovat (Exchange types):
 
 - direct messaging
 - asd asd
 - asd asd 
 
 Työhön on valittu käytettäväksi yksinkertaisin direct-menetelmä, koska se on käyttötapauksen kannalta riittävä.
-
 
 ## Prosessointi
 
@@ -101,6 +102,8 @@ Prosessointityökalu pyörii ajastetusti tausta-ajona. Se on toteutettu hyödynt
 - Scala
 - Java
 - Akka.
+
+Prosessointi höydyntää E-Reading -hankkeen yhteydessä toteutettua Juju-koneistoa ja sitä sovelletaan entiteettien tunnistamiseen ja avainsanojen poimintaan. Työn aikana oli myös tarkoitus todentaa koneiston käyttökelpoisuus ulkopuolisen näkökulmasta. Samalla oli mahdollisuus vaikuttaa ohjelmiston rajapinnan, dokumentaation ja sen kehittämiseen liittyvien käytäntöjen kehitykseen.
 
 ### Scala
 
@@ -113,19 +116,24 @@ Koska Scala toimii JVM:n päällä, sillä on mahdollista käyttää muilla ohje
 
 MongoDB on dokumenttiorientoitunut tietokanta. 
 
-Prosessointi höydyntää E-Reading -hankkeen yhteydessä toteutettua Juju-koneistoa ja sitä sovelletaan entiteettien tunnistamiseen ja avainsanojen poimintaan. Työn aikana oli myös tarkoitus todentaa koneiston käyttökelpoisuus ulkopuolisen näkökulmasta. Samalla oli mahdollisuus vaikuttaa ohjelmiston rajapinnan, dokumentaation ja sen kehittämiseen liittyvien käytäntöjen kehitykseen.
-
 ### D3.js
 
 D3 on JavaScript-kirjasto.
 
-## Visualisointi
+# Visualisointi
+
+Keskustelun visualisoinnin tarkoituksena on helpottaa sisällön ja suhteiden hahmottamista.
 
 - Kokonainen keskustelu on luettavissa
 - Yksittäisten puheenvuorojen avainsanat esiintymisjärjestyksessä
-- Erittäin tärkeää.
 
-# Keskustelijoiden pisteyttäminen, "Gamification"
+## Puheenvuorojen eroavaisuudet
+
+Halusimme selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voiko sen visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystymmekö esimerkiksi erottelemaan keskustelijat, joilla on tuoda uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita.
+
+
+
+## Keskustelijoiden pisteyttäminen, "Gamification"
 
 Keskustelun pisteyttämisen ydintarkoitus on saada nopeasti karkea kuva osallistujien aktiivisuudesta ja puheenvuorojen laadukkuudesta. Pisteytys perustuu aina puheenvuoroon ja sen välisiin suhteisiin. Pisteitä saa esimerkiksi mainitsemalla uuden käsitteen keskustelun aikana.
 
