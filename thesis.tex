@@ -10,6 +10,7 @@
 \usepackage{lipsum}
 \usepackage{titlesec}
 \usepackage{url}
+\usepackage{mathtools}
 %\usepackage{hyperref}
 %condition for adding or not space in TOC
 \usepackage{etoolbox}
@@ -285,7 +286,7 @@ Keskustelun visualisoinnin tarkoituksena on helpottaa sisällön ja suhteiden ha
 - Yksittäisten puheenvuorojen avainsanat esiintymisjärjestyksessä
 
 \section{Puheenvuorojen eroavaisuudet}
-Haluttiin selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voiko eroavaisuuksia visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystytäänkö esimerkiksi erottelemaan keskustelijat, jotka kykenevät tuomaan uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita lisäämättä mitään uutta. Eroavaisuuksista voidaan myös mahdollisesti nähdä, eteneekö keskustelu eri aihepiireihin.
+Haluttiin selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voidaanko eroavaisuuksia visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystytäänkö esimerkiksi erottelemaan keskustelijat, jotka kykenevät tuomaan uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita lisäämättä mitään uutta. Eroavaisuuksista voidaan myös mahdollisesti nähdä, eteneekö keskustelu eri aihepiireihin.
 
 Työssä tutkittiin kahta erilaista lähestymistapaa:
 \begin{enumerate}
@@ -293,12 +294,30 @@ Työssä tutkittiin kahta erilaista lähestymistapaa:
 \item yksittäisen puheenvuoron eroavaisuus keskustelukokonaisuuteen.
 \end{enumerate}
 
-Erilaisuus määritetään Jakkard-indeksillä, jota käytetään dokumenttien samanlaisuuden ja erilaisuuden vertailuun. Lähestymistapoja tämänkin suhteen oli pari. Erilaisuuden vertailun lähtöaineistona voidaan käyttää:
+Jaccard-samanlaisuudella (rinnastetaan usein Tanimoto-samanlaisuuteen) voidaan käyttää dokumenttien samanlaisuuden vertailuun. Jaccard-samanlaisuus voidaan määrittää seuraavalla kaavalla:
+
+\begin{math}
+J(X, Y) = \frac{| X \bigcap Y |}{| X \bigcup Y |}.
+\end{math}
+
+X ja Y edustavat sanajoukkoja. Laskutoimituksessa jaetaan joukkojen X ja Y intersektion tuottaman joukon koko samojen joukkojen unionin koolla. Tuloksena on Jaccard-indeksi (Paul Jaccard, 1901), joka kuvastaa joukkojen samanlaisuutta.
+
+Sanajoukkojen eroavaisuus, Jakkard-etäisyys, voidaan laskea kääntäen seuraavalla kaavalla:
+
+\begin{math}
+J_\delta(X, Y) = 1 - \frac{| X \bigcap Y |}{| X \bigcup Y |} = \frac{| X \bigcup Y | - | X \bigcap Y |}{| X \bigcup Y |}.
+\end{math}
+
+Datan analysoimisessa voidaan käyttää useita eri samanlaisuuden määrittelytapoja. Määrittelytavan valinta riippuu datan luonteesta, eikä sitä voi suoraan tieteellisesti perustella \cite[s. 298]{encyclopedia-of-distances}.
+
+Lähestymistapoja aineiston valinnan suhteen on pari. Samanlaisuuden vertailun lähtöaineistona voidaan käyttää:
 
 \begin{enumerate}
 \item kokonaista puheenvuoroa, jota verrataan koko keskusteluun
 \item puheenvuorosta poimittuja avainsanoja, joita verrataan koko keskustelusta poimittuihin avainsanoihin
 \end{enumerate}
+
+Työn aikana päädyttiin käyttämään puheenvuoron asiasanoitusta samanlaisuuden vertailun joukkona, jotta saadaan verrattua puheenvuoron olennaisimpia osia keskenään. Puheenvuoron jokaisen yksittäisen sanan käyttäminen vertailussa vääristäisi tuloksia kielessä käytettyjen konjuktioiden seurauksena. Asiasanoituksia käytettäessä herää kysymys, kannattaako myös avainsanojen painotukset ottaa huomioon vertailussa.
 
 \section{Gamification}
 Keskustelun pisteyttämisen ydintarkoitus on saada nopeasti karkea kuva osallistujien aktiivisuudesta ja puheenvuorojen laadukkuudesta. Pisteytys perustuu aina puheenvuoroon ja sen välisiin suhteisiin. Pisteitä saa esimerkiksi mainitsemalla uuden käsitteen keskustelun aikana.
