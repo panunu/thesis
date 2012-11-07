@@ -11,6 +11,8 @@
 \usepackage{titlesec}
 \usepackage{url}
 \usepackage{mathtools}
+\usepackage{float}
+
 %\usepackage{hyperref}
 %condition for adding or not space in TOC
 \usepackage{etoolbox}
@@ -46,7 +48,7 @@
 \tightlists
 
 %IMAGE - FIGURE
-%the figures are in "img" folder.
+%the figures are in "illustration" folder.
 \graphicspath{{illustration/}}
 %figure number without chapter (1.1, 1.2, 2.1) to (1, 2, 3)
 \counterwithout{figure}{chapter}
@@ -58,6 +60,10 @@
 \captiontitlefont{\small}
 %space after figure caption (and other float elements)
 \setlength{\belowcaptionskip}{-7pt}
+
+%CODE
+\newfloat{program}{thp}{lop}
+\floatname{program}{Esimerkkikoodi}
 
 %TOC
 %remove dots.
@@ -154,21 +160,8 @@
 \chapter{Johdanto}
 Tavoitteena on selvittää, voiko keskustelun automaattisesta visualisoinnista ja yhteenvedosta olla hyötyä keskustelun kokonaisuuden hahmottamisen suhteen. Samalla todennetaan insinöörityössä hyödynnettävän Juju-ohjelmiston käyttökelpoisuus.
 
-\chapter{Kasa}
-* Puppugeneraattorin käynnistys
-* Johdanto
-* Keskustelijoiden vuorovaikutus keskusteluun ja toisiinsa
-* Nykyiset palaverikäytännöt ja ongelmakohdat
-* Käyttötapaukset / Automaattinen litterointi - tulevaisuus
-* Tekninen toteutus ja tietorakenteet
-* Keskustelijoiden pisteyttäminen, gamification
-* Keskustelukulun visualisointi
-* Keskustelun yhteenveto
-* Tulosten todentaminen ja jatkokehitys
-* Tiivistelmä
-
 \chapter{Keskustelijoiden vuorovaikutus keskusteluun ja toisiinsa}
-Keskustelun osalliset ja heidän väliset suhteet vaikuttavat keskustelun kulkuun ja lopputulokseen.
+Keskustelun osalliset ja heidän väliset suhteet vaikuttavat keskustelun kulkuun ja lopputulokseen. Mielenkiinnon kohteet keskustelussa vaihtelevat osallisten kontribuutiolla. \cite[s. 1]{finding-topics-in-dynamical-text}
 ...
 
 Auttaako visualisointi dialektiikan eli keskinäisviestinnän todentamisessa? Puhuvatko ihmiset siis samoista asioista, vai ilmaisevatko he omia ajatuksiaan sivuuttaen keskustelukumppanin sanoman?
@@ -181,7 +174,9 @@ Onko keskustelun sisältö helpompi hahmottaa, kun siitä on etukäteen tehty au
 
 Jos nähdään, mitä aiheita esimerkiksi palaverin aikana on käsitelty ja samalla kerätään huomioita, mitä asioita palaverin ansiosta on päätetty, voidaan mahdollisesti useamman palaverin jälkeen alkaa muodostaa mielikuvaa siitä, käsitelläänkö samaa aihetta useissa palavereissa saamatta aikaan mitään konkreettista. Näin voidaan nostaa esille mahdollisesti hankalat päätökset ja korottaa niiden painoarvoa seuraavassa käsittelyssä.
 
-\chapter{Käyttötapaukset - Automaattinen litterointi - tulevaisuus}
+\chapter{Käyttötapaukset}
+
+\section{Automaattinen litterointi - tulevaisuus}
 Palavereissa, asiakastapaamisissa ja vastaavissa tilaisuuksissa vähintään yhden osallistujan kannattaa ottaa sihteerin rooli. Tämä tarkoittaa sitä, että hänen mahdollisuutensa osallistua keskusteluun vähenee merkittäväksi. Varsinkin pienemmässä projektiryhmässä yhden henkilön irroittaminen kyseiseen tehtävään ei aina ole mahdollista. Tunnetusti ihminen ei ole tehokas suorittamaan useita tehtäviä samanaikaisesti. Tämä saattaa johtaa siihen, ettei palaverin aikana kirjoitetun muistion laatu vastaa aina haluttua.
 
 Yksi ratkaisuvaihtoehto on keskustelun äänittäminen muistiin, jolloin mikään käsitelty asia ei jäisi kirjaamatta. Näin vältettäisiin myös mahdolliset kiistatilanteet palaverin aikana tehdyissä suullisissa sopimuksissa. Ratkaisu on kuitenkin kömpelö, eikä soveltuisi varsinkaan pitkäkestoisiin keskusteluihin, koska nauhoituksen läpikäyminen jälkikäteen esimerkiksi yhteenvedon kirjoittamista varten veisi aikaa. Toiseksi voisi olla työlästä hahmottaa kuka vuorollaan on ollut äänessä, johtaen mahdollisiin väärinkäsityksiin.
@@ -265,13 +260,19 @@ Koska Scala toimii JVM:n päällä, sillä on mahdollista käyttää muilla ohje
 \subsection{SBT}
 SBT, Simple Build Tool, on pääasiassa Scala-projekteihin tarkoitettu nönnönnöö.
 
-\begin{verbatim}
-resolvers += "Local Maven Repository" at "file://.m2/repository"
-libraryDependencies += "fi.metropolia.ereading" % "Juju" % "0.0.1-SNAPSHOT"
-\end{verbatim}
-Esimerkki Jujun määrityksestä projektiin riippuvuudeksi sbt.build-tiedostossa.
+\begin{program}
+  \begin{verbatim}
+  resolvers += "Local Maven Repository" at "file://.m2/repository"
+  libraryDependencies += "fi.metropolia.ereading" % "Juju" % "0.0.1-SNAPSHOT"
+  \end{verbatim}
+  \caption{Esimerkki Jujun määrityksestä projektiin riippuvuudeksi sbt.build-tiedostossa.}
+\end{program}
 
 Riippuvuuden määrittelyn jälkeen Juju voidaan ladata, jonka jälkeen se on valmis käytettäväksi.
+
+\section{Käyttöliittymä}
+
+\subsection{Symfony2}
 
 \subsection{MongoDB}
 MongoDB on dokumenttiorientoitunut tietokanta. 
@@ -294,30 +295,54 @@ Työssä tutkittiin kahta erilaista lähestymistapaa:
 \item yksittäisen puheenvuoron eroavaisuus keskustelukokonaisuuteen.
 \end{enumerate}
 
-Jaccard-samanlaisuudella (rinnastetaan usein Tanimoto-samanlaisuuteen) voidaan käyttää dokumenttien samanlaisuuden vertailuun. Jaccard-samanlaisuus voidaan määrittää seuraavalla kaavalla:
+Samanlaisuuden tai erilaisuuden analysoimisessa voidaan käyttää useita eri  määrittelytapoja. Määrittelytavan valinta riippuu analysoitavan materiaalin luonteesta, eikä sitä voi suoraan tieteellisesti perustella \cite[s. 298]{encyclopedia-of-distances}.
+
+Jaccard-samanlaisuutta (rinnastetaan usein Tanimoto-samanlaisuuteen \cite[s. 299]{encyclopedia-of-distances}) voidaan käyttää dokumenttien samanlaisuuden vertailuun. Jaccard-samanlaisuus voidaan määrittää seuraavalla kaavalla:
 
 \begin{math}
-J(X, Y) = \frac{| X \bigcap Y |}{| X \bigcup Y |}.
+J(X, Y) = \frac{| X \bigcap Y |}{| X \bigcup Y |},
 \end{math}
 
-X ja Y edustavat sanajoukkoja. Laskutoimituksessa jaetaan joukkojen X ja Y intersektion tuottaman joukon koko samojen joukkojen unionin koolla. Tuloksena on Jaccard-indeksi (Paul Jaccard, 1901), joka kuvastaa joukkojen samanlaisuutta.
+jossa X ja Y edustavat sanajoukkoja. Laskutoimituksessa jaetaan joukkojen X ja Y intersektion tuottaman joukon koko samojen joukkojen unionin koolla. Tuloksena on Jaccard-indeksi (Paul Jaccard, 1901), joka kuvastaa joukkojen samanlaisuutta. Funktion mahdolliset tulokset ovat välillä 0.0 - 1.0, jossa 0 tarkoittaa täysin erilaisia ja 1 täysin samanlaisia dokumentteja. Kyseisen kaavan toteuttaminen Scalalla on yksinkertaista:
 
-Sanajoukkojen eroavaisuus, Jakkard-etäisyys, voidaan laskea kääntäen seuraavalla kaavalla:
+\begin{program}
+  \begin{verbatim}
+def index(a: Set[String], b: Set[String]): Double =
+  a.intersect(b).size / a.union(b).size.asInstanceOf[Double]
+  \end{verbatim}
+  \caption{Jaccard-indeksin laskennan toteutus.}
+\end{program}
+
+Huomaa, että Set-tietorakenne voi sisältää vain yksilöllisiä merkkijonoja, joten sanojen duplikaattiesiintymät karsitaan pois. Tämä on tärkeää, koska duplikaattiesiintymät vääristäisivät tulosta.
+
+Sanajoukkojen eroavaisuus, Jakkard-etäisyys, voidaan laskea edellistä kaavaa mukaillen:
 
 \begin{math}
 J_\delta(X, Y) = 1 - \frac{| X \bigcap Y |}{| X \bigcup Y |} = \frac{| X \bigcup Y | - | X \bigcap Y |}{| X \bigcup Y |}.
 \end{math}
 
-Datan analysoimisessa voidaan käyttää useita eri samanlaisuuden määrittelytapoja. Määrittelytavan valinta riippuu datan luonteesta, eikä sitä voi suoraan tieteellisesti perustella \cite[s. 298]{encyclopedia-of-distances}.
-
-Lähestymistapoja aineiston valinnan suhteen on pari. Samanlaisuuden vertailun lähtöaineistona voidaan käyttää:
+Lähestymistapoja vertailtavan aineiston valinnan suhteen on pari. Samanlaisuutta vertailtaessa voidaan käyttää:
 
 \begin{enumerate}
 \item kokonaista puheenvuoroa, jota verrataan koko keskusteluun
 \item puheenvuorosta poimittuja avainsanoja, joita verrataan koko keskustelusta poimittuihin avainsanoihin
 \end{enumerate}
 
-Työn aikana päädyttiin käyttämään puheenvuoron asiasanoitusta samanlaisuuden vertailun joukkona, jotta saadaan verrattua puheenvuoron olennaisimpia osia keskenään. Puheenvuoron jokaisen yksittäisen sanan käyttäminen vertailussa vääristäisi tuloksia kielessä käytettyjen konjuktioiden seurauksena. Asiasanoituksia käytettäessä herää kysymys, kannattaako myös avainsanojen painotukset ottaa huomioon vertailussa.
+Työn aikana päädyttiin käyttämään puheenvuoron asiasanoitusta samanlaisuuden vertailun joukkona, jotta saadaan verrattua puheenvuorojen olennaisimpia osia keskenään. Puheenvuoron jokaisen yksittäisen sanan käyttäminen vertailussa vääristäisi tuloksia kielessä käytettyjen konjuktioiden seurauksena. Asiasanoituksia käytettäessä herää kysymys, kannattaako myös avainsanojen painotukset ottaa huomioon vertailussa.
+
+Yksinkertaisen Jaccard-indeksin heikkous on sisällön painoarvon huomiotta jättäminen. Jaccard-indeksissä vertaillaan sanojen esiintymiä toisiin ottamatta huomioon frekvenssiä; kuinka usein jokin sana on esiintynyt. Näin voidaan päätyä hyvinkin vääristyneisiin tuloksiin. Esimerkki: keskustelija, Matti, puhuu pääosin aiheesta X, ja mainitsee kerran aiheen Y. Toinen keskustelijan osallinen, Teppo, puhuu taas päinvastoin aiheesta Y, mainiten X:n vain harvoin. Jos tästä keskustelusta laskettaisiin Jaccard-indeksi, saataisiin funktion J(X, Y) tulokseksi 1. Toisinsanoen Jakkard-indeksi luontaa dokumentit täysin samanlaisiksi, joka ei keskustelua tarkasteltaessa pidä paikkaansa.
+
+Painotettu Jaccard-indeksi voidaan määrittää vektoreille X ja Y seuraavanlaisesti \cite[s. 2]{finding-the-jaccard-median}:
+
+\begin{math}
+  J(X, Y) = \left\{ 
+  \begin{array}{l l}
+	\frac{\sum^n_{i=1} min(X_i, Y_i)}{\sum^n_{i=1} max(X_i, Y_i)} & \quad \text{$jos$ } \sum^n_{i=1} max(X_i, Y_i) > 0,\\
+	1 & \quad \text{$jos$ } \sum^n_{i=1} max(X_i, Y_i) = 0.\\	
+  \end{array} \right.
+\end{math}
+
+Painotetussa ratkaisussa ei siis vain vertailla samanlaisuutta esiintyneiden sanojen perusteella, vaan otetaan huomioon myös esiintymisfrekvenssi.
 
 \section{Gamification}
 Keskustelun pisteyttämisen ydintarkoitus on saada nopeasti karkea kuva osallistujien aktiivisuudesta ja puheenvuorojen laadukkuudesta. Pisteytys perustuu aina puheenvuoroon ja sen välisiin suhteisiin. Pisteitä saa esimerkiksi mainitsemalla uuden käsitteen keskustelun aikana.
