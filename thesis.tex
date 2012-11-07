@@ -197,7 +197,7 @@ aika, henkilö, puheenvuoro.
 Järjestelmän tekninen toteutus on joustavuuden nimissä jaettu selkeästi kahteen osaan: prosessointityökaluun ja käyttöliittymään (web-palvelu). Tämä mahdollistaa prosessointityökalun hyödyntämisen erillisissä palveluissa ilman, että se on sidottu mihinkään valmiiseen käyttöliittymään. Samalla web-palvelun voi julkaista tietokantaan tallennetulla esiprosessoidulla datalla. Rakenne on esitetty kuvassa [KUVA].
 
 \section{Järjestelmien välinen viestintä}
-Järjestelmän prosessointityökalu ja käyttöliittymä on toteutettu eri teknologioilla: Scala ja PHP.
+Järjestelmän prosessointityökalu ja käyttöliittymä on toteutettu eri teknologioilla: Scala ja PHP. Tämä johtaa siihen, ettei järjestelmien välinen viestintä ole täysin yksiselitteistä. Tämä ei kuitenkaan ole ongelma, vaan ratkaisuja tähän ongelmaan on olemassa \vref{topic:amqp}.
 
 Viestit välitetään järjestelmästä toiseen eri muodoissa. Ne käsitellään Base64-koodauksella riippumatta viestin kulkusuunnasta. Enkoodauksen tarkoituksena on välttää mahdolliset merkistöongelmat ja tästä mahdollisesti aiheutuva tiedon korruptoituminen. Lähettävä osapuoli enkoodaa viestin, ja vastaanottaja dekoodaa sen.
 
@@ -205,7 +205,7 @@ Käyttöliittymä lähettää palveluun ladatun CSV-tiedoston sisällön prosess
 
 Prosessointityökalu rakentaa viestijonon kautta saadusta CSV-materiaalista JSON-formaatin mukaista dataa. Tämä välitetään takaisin käyttöliittymäohjelmistolle tallennettavaksi tietokantaan. 
 
-\subsection{Advanced Message Queue Protocol}
+\subsection{Advanced Message Queue Protocol\label{topic:amqp}}
 Viestijonoprotokollaa, AMQP, käytetään tiedon välittämiseen järjestelmästä toiseen. AMQP:n toteuttava middleware broker!! toimii viestinvälittäjänä.
 
 Termistöstä??
@@ -330,7 +330,7 @@ Lähestymistapoja vertailtavan aineiston valinnan suhteen on pari. Samanlaisuutt
 
 Työn aikana päädyttiin käyttämään puheenvuoron asiasanoitusta samanlaisuuden vertailun joukkona, jotta saadaan verrattua puheenvuorojen olennaisimpia osia keskenään. Puheenvuoron jokaisen yksittäisen sanan käyttäminen vertailussa vääristäisi tuloksia kielessä käytettyjen konjuktioiden seurauksena. Asiasanoituksia käytettäessä herää kysymys, kannattaako myös avainsanojen painotukset ottaa huomioon vertailussa.
 
-Yksinkertaisen Jaccard-indeksin heikkous on sisällön painoarvon huomiotta jättäminen. Jaccard-indeksissä vertaillaan sanojen esiintymiä toisiin ottamatta huomioon frekvenssiä; kuinka usein jokin sana on esiintynyt. Näin voidaan päätyä hyvinkin vääristyneisiin tuloksiin. Esimerkki: keskustelija, Matti, puhuu pääosin aiheesta X, ja mainitsee kerran aiheen Y. Toinen keskustelijan osallinen, Teppo, puhuu taas päinvastoin aiheesta Y, mainiten X:n vain harvoin. Jos tästä keskustelusta laskettaisiin Jaccard-indeksi, saataisiin funktion J(X, Y) tulokseksi 1. Toisinsanoen Jakkard-indeksi luontaa dokumentit täysin samanlaisiksi, joka ei keskustelua tarkasteltaessa pidä paikkaansa.
+Yksinkertaisen Jaccard-indeksin heikkous on sisällön painoarvoistamisen puute. Jaccard-indeksissä vertaillaan sanojen esiintymiä toisiin ottamatta huomioon frekvenssiä; kuinka usein jokin sana on esiintynyt. Näin voidaan päätyä hyvinkin vääristyneisiin tuloksiin. Esimerkki: keskustelija, Matti, puhuu pääosin aiheesta X, ja mainitsee kerran aiheen Y. Toinen keskustelun osallinen, Teppo, puhuu taas päinvastoin aiheesta Y, mainiten X:n vain harvoin. Jos tästä keskustelusta laskettaisiin Jaccard-indeksi avainsanojen perusteella, saataisiin funktion J(M, T) tulokseksi 1. Toisinsanoen Jakkard-indeksi tulkitsee dokumentit täysin samanlaisiksi, joka ei keskustelua tarkasteltaessa pidä paikkaansa.
 
 Painotettu Jaccard-indeksi voidaan määrittää vektoreille X ja Y seuraavanlaisesti \cite[s. 2]{finding-the-jaccard-median}:
 
