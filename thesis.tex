@@ -187,11 +187,15 @@ Jatkuvan puheen muuttamiseksi tekstiksi on olemassa jo valmiita sovelluksia, esi
 
 Kuvitellaan kuitenkin automaattisen litteroinnin olevan mahdollista. Jotta tallenteen analysointi olisi mielekästä keskustelun näkökulmasta, puheenvuoroihin pitäisi liittää identiteettitieto. Toistaiseksi tarvittavaa teknologiaa, joka puheen lisäksi tunnistaisi puhujan identiteetin luotettavasti, ei ole olemassa [SELVITÄ], joten tämä pitäisi korvata yksinkertaisemmalla ratkaisulla. Teknisesti helposti toteutettava vaihtoehto olisi jakaa keskustelun osallisille henkilökohtaiset mikrofonit. Mikrofoneihin liitettäisiin puhujan henkilöllisyys joko etu- tai jälkikäteen. Tämä helpottaisi huomattavasti keskustelun etenemisen hahmottamista.
 
-Edellämainitun ratkaisun avulla pystyisimme keräämään keskustelusta taulukossa [TAULUKKO] esitetyn formaatin mukaista dataa. Järjestelmä olettaa, että saatavissa oleva aineisto on kyseisessä muodossa.
+Edellämainitun ratkaisun avulla pystyisimme keräämään keskustelusta taulukossa [TAULUKKO] esitetyn formaatin mukaista dataa. Järjestelmä olettaa, että saatavissa oleva aineisto on kyseisessä muodossa (CSV).
 
-aika, henkilö, puheenvuoro
-aika, henkilö, puheenvuoro
-aika, henkilö, puheenvuoro.
+\begin{tabular}{| l | l | l |}
+\hline
+Aika & Henkilö & Puheenvuoro \\ \hline
+2012-08-11 13:37 & Matti & Olipas kerran... \\ \hline
+2012-08-11 16:20 & Teppo & Siinäpä tarinaa kerrakseen. Muistan kerran, kun... \\ \hline
+2012-08-11 16:24 & Matti & Sepä kiva muistelma. \\ \hline
+\end{tabular}
 
 \chapter{Tekninen toteutus ja tietorakenteet}
 Järjestelmän tekninen toteutus on joustavuuden nimissä jaettu selkeästi kahteen osaan: prosessointityökaluun ja käyttöliittymään (web-palvelu). Tämä mahdollistaa prosessointityökalun hyödyntämisen erillisissä palveluissa ilman, että se on sidottu mihinkään valmiiseen käyttöliittymään. Samalla web-palvelun voi julkaista tietokantaan tallennetulla esiprosessoidulla datalla. Rakenne on esitetty kuvassa [KUVA].
@@ -286,8 +290,13 @@ Keskustelun visualisoinnin tarkoituksena on helpottaa sisällön ja suhteiden ha
 - Kokonainen keskustelu on luettavissa
 - Yksittäisten puheenvuorojen avainsanat esiintymisjärjestyksessä
 
-\section{Puheenvuorojen eroavaisuudet}
-Haluttiin selvittää, onko puheenvuorojen eroavaisuuksien seuraaminen hyödyllistä, tai voidaanko eroavaisuuksia visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystytäänkö esimerkiksi erottelemaan keskustelijat, jotka kykenevät tuomaan uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita lisäämättä mitään uutta. Eroavaisuuksista voidaan myös mahdollisesti nähdä, eteneekö keskustelu eri aihepiireihin.
+\section{Asiasanoitus}
+Työn aikana pyrittiin selvittämään, voiko keskustelun painopisteitä hahmottaa paremmin asiasanoittamalla puheenvuorot. 
+
+Tarkkojen numeeristen arvojen esittämistä avainsanojen painotuksessa ei koettu hyödylliseksi, vaan painotus visualisoitiin suhteellisesti tekemällä tärkeiden sanojen elementeistä kooltaan isompia.
+
+\section{Puheenvuorojen samanlaisuudet}
+Haluttiin selvittää, onko puheenvuorojen samanlaisuuksien ja eroavaisuuksien seuraaminen hyödyllistä, tai voidaanko näitä visualisoimalla hahmottaa jotakin uutta keskusteluun liittyen. Pystytäänkö esimerkiksi erottelemaan keskustelijat, jotka kykenevät tuomaan uusia ideoita puheenaiheiksi heistä, jotka vain toistelevat edellämainittuja aiheita lisäämättä mitään uutta. Eroavaisuuksista voidaan myös mahdollisesti nähdä, eteneekö keskustelu eri aihepiireihin.
 
 Työssä tutkittiin kahta erilaista lähestymistapaa:
 \begin{enumerate}
@@ -297,6 +306,7 @@ Työssä tutkittiin kahta erilaista lähestymistapaa:
 
 Samanlaisuuden tai erilaisuuden analysoimisessa voidaan käyttää useita eri  määrittelytapoja. Määrittelytavan valinta riippuu analysoitavan materiaalin luonteesta, eikä sitä voi suoraan tieteellisesti perustella \cite[s. 298]{encyclopedia-of-distances}.
 
+\subsection{Laskennallinen samanlaisuus (Jaccard)}
 Jaccard-samanlaisuutta (rinnastetaan usein Tanimoto-samanlaisuuteen \cite[s. 299]{encyclopedia-of-distances}) voidaan käyttää dokumenttien samanlaisuuden vertailuun. Jaccard-samanlaisuus voidaan määrittää seuraavalla kaavalla:
 
 \begin{math}
@@ -325,12 +335,12 @@ Lähestymistapoja vertailtavan aineiston valinnan suhteen on pari. Samanlaisuutt
 
 \begin{enumerate}
 \item kokonaista puheenvuoroa, jota verrataan koko keskusteluun
-\item puheenvuorosta poimittuja avainsanoja, joita verrataan koko keskustelusta poimittuihin avainsanoihin
+\item puheenvuorosta poimittuja avainsanoja, joita verrataan koko keskustelusta poimittuihin avainsanoihin.
 \end{enumerate}
 
 Työn aikana päädyttiin käyttämään puheenvuoron asiasanoitusta samanlaisuuden vertailun joukkona, jotta saadaan verrattua puheenvuorojen olennaisimpia osia keskenään. Puheenvuoron jokaisen yksittäisen sanan käyttäminen vertailussa vääristäisi tuloksia kielessä käytettyjen konjuktioiden seurauksena. Asiasanoituksia käytettäessä herää kysymys, kannattaako myös avainsanojen painotukset ottaa huomioon vertailussa.
 
-Yksinkertaisen Jaccard-indeksin heikkous on sisällön painoarvoistamisen puute. Jaccard-indeksissä vertaillaan sanojen esiintymiä toisiin ottamatta huomioon frekvenssiä; kuinka usein jokin sana on esiintynyt. Näin voidaan päätyä hyvinkin vääristyneisiin tuloksiin. Esimerkki: keskustelija, Matti, puhuu pääosin aiheesta X, ja mainitsee kerran aiheen Y. Toinen keskustelun osallinen, Teppo, puhuu taas päinvastoin aiheesta Y, mainiten X:n vain harvoin. Jos tästä keskustelusta laskettaisiin Jaccard-indeksi avainsanojen perusteella, saataisiin funktion J(M, T) tulokseksi 1. Toisinsanoen Jakkard-indeksi tulkitsee dokumentit täysin samanlaisiksi, joka ei keskustelua tarkasteltaessa pidä paikkaansa.
+Yksinkertaisen Jaccard-indeksin heikkous on sisällön painoarvoistamisen puute. Jaccard-indeksissä vertaillaan sanojen esiintymiä toisiin ottamatta huomioon frekvenssiä; kuinka usein jokin sana on esiintynyt. Näin voidaan päätyä hyvinkin vääristyneisiin tuloksiin. Esimerkki: keskustelija, Matti, puhuu pääosin aiheesta X, ja mainitsee kerran aiheen Y. Toinen keskustelun osallinen, Teppo, puhuu taas päinvastoin aiheesta Y, mainiten X:n vain harvoin. Jos tästä keskustelusta laskettaisiin Jaccard-indeksi avainsanojen perusteella, saataisiin edellämainitusta keskustelusta koostetuilla määrittelyjoukoilla Jakkard-indeksin funktion tulokseksi 1. Toisinsanoen Jakkard-indeksi tulkitsee dokumentit täysin samanlaisiksi, joka ei keskustelua tarkasteltaessa pidä paikkaansa.
 
 Painotettu Jaccard-indeksi voidaan määrittää vektoreille X ja Y seuraavanlaisesti \cite[s. 2]{finding-the-jaccard-median}:
 
@@ -344,6 +354,33 @@ Painotettu Jaccard-indeksi voidaan määrittää vektoreille X ja Y seuraavanlai
 
 Painotetussa ratkaisussa ei siis vain vertailla samanlaisuutta esiintyneiden sanojen perusteella, vaan otetaan huomioon myös esiintymisfrekvenssi.
 
+\subsection{Asiasanoituksen visualisointiin perustuva samanlaisuus}
+
+
+\section{Chernoffin naamat}
+Eräs todella tärkeä osa kommunikaatiota on ilmaisun tyyli. Tällä tarkoitan esimerkiksi sitä, millä äänensävyllä asian ilmaisee. Keskustelun tulkitsemisessa tällä on iso rooli. Jos keskustelu vaikka muuttuu dramaattisesti, puhetyylistä voidaan saada osviittaa mahdollisesta syystä. Ilmaisuille on tehty oma merkintäkielensä, [SELVITÄ].
+
+Kielteisyyden tai myönteisyyden ilmentäminen on hankalaa.
+
+Sähköisessä keskustelussa keskustelun sävyä on kuitenkin melkein mahdotonta tulkita. Yksi vaihtoehto keskustelun visualisoinnissa on käyttää.
+
+Chernoffin naamoissa on 18 erilaista kasvonpiirteen mallia, joihin kuuluu esimerkiksi seuraavat:
+\begin{itemize}
+\item{pään muoto}
+\item{nenän pituus}
+\item{silmien koko ja vinous}
+\item{silmien epäkeskisyys ja erillisyys}
+\item{kulmakarvat ja katseen suunta}
+\item{suun kaarevuus, leveys ja korkeus.}
+\end{itemize}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=10cm]{suomen-vointi-chernoff}
+    \caption{Esimerkki Chernoffin naamoista: Suomen vointi taloudellisin ilmein \cite{wikibooks:latex}.}
+    \label{fig:suomen-voint-chernoff}
+\end{figure}
+
 \section{Gamification}
 Keskustelun pisteyttämisen ydintarkoitus on saada nopeasti karkea kuva osallistujien aktiivisuudesta ja puheenvuorojen laadukkuudesta. Pisteytys perustuu aina puheenvuoroon ja sen välisiin suhteisiin. Pisteitä saa esimerkiksi mainitsemalla uuden käsitteen keskustelun aikana.
 
@@ -355,8 +392,19 @@ Mahdollisten riskien takia projektissa päädyttiin ratkaisuun, jossa pisteytyst
 ...
 
 \chapter{Tulosten todentaminen ja jatkokehitys}
-Eräs todella tärkeä osa kommunikaatiota on ilmaisun tyyli. Tällä tarkoitan esimerkiksi sitä, millä äänensävyllä asian ilmaisee. Keskustelun tulkitsemisessa tällä on iso rooli. Jos keskustelu vaikka muuttuu dramaattisesti, puhetyylistä voidaan saada osviittaa mahdollisesta syystä. Ilmaisuille on tehty oma merkintäkielensä, [SELVITÄ].
-
 Tällä hetkellä sovellus pyrkii olemaan kohtuullisen yleispätevä erikoistumatta mihinkään tiettyyn keskusteluvariaatioon. Jatkossa ohjelmistoa voisi jatkokehittää erikoistumaan erilaisiin sovellutuksiin. Eräs idea olisi hahmottaa yksittäisten henkilöiden välisten suhteiden lisäksi vuorovaikutusta isommassa mittakaavassa. Tämä voitaisiin saavuttaa erilaisten tunnisteiden lisäämisellä käsiteltävään materiaaliin. Yksi vaihtoehto olisi, että henkilölle määriteltäisiin ryhmä, johon hän kuuluu. Näin voitaisiin esimerkiksi politiikan viitekehyksessä havaita, miten puolueiden ajamat aihepiirit eroavat toisistaan.
+
+Todennettiin, että Juju tuottaa tarpeeksi pätevää asiasanoitusta myös keskustelujen osalta.
+
+%----------------------------------------------------------------------------------------
+%   BIBLIOGRAPHY 
+%----------------------------------------------------------------------------------------
+
+\bibliographystyle{vancouver}
+%line space
+\singlespacing
+\begin{flushleft}
+\bibliography{biblio}
+\end{flushleft}
 
 \end{document}
